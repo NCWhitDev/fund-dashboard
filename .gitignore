@@ -3,3 +3,4 @@ Notes.txt
 .venv/
 __pycache__/
 *.pyc
+.session.sql
