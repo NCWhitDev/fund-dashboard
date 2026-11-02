@@ -44,14 +44,15 @@ def insert_prices(fund_id, df):
 # ========================== Fetch Data ==============================================
 
 TICKERS = ["VOO", "SPY", "BND"]
-for ticker in TICKERS:
+def ingest():
+    for ticker in TICKERS:
 
-    df = yf.download(ticker, period="max", interval="1d")
-    df.columns = df.columns.droplevel(1)    # drops the Ticker level from the column headers
-    df = df.reset_index()                   # turns the Date index into a regular "Date" column
-    fund_id = insert_fund(ticker)
-    insert_prices(fund_id, df)
-    print(f"Loaded {len(df)} rows for {ticker}")
+        df = yf.download(ticker, period="max", interval="1d")
+        df.columns = df.columns.droplevel(1)    # drops the Ticker level from the column headers
+        df = df.reset_index()                   # turns the Date index into a regular "Date" column
+        fund_id = insert_fund(ticker)
+        insert_prices(fund_id, df)
+        print(f"Loaded {len(df)} rows for {ticker}")
 
 def get_prices(fund_id): # fetch the price history for a given fund_id from the database
     cur = conn.cursor()
@@ -137,3 +138,6 @@ def calculate_max_drawdown(prices): # calculate the maximum drawdown of a fund's
 # print(voo_max_dd)
 
 # ========================================================================================
+
+if __name__ == "__main__":
+    ingest()
